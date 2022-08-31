@@ -1,0 +1,8 @@
+[
+  {
+    "directory": "/media/mohammad/Files/projects/mimOS",
+    "command": "nasm -f bin boot_sector.asm -o boot_sector.bin",
+    "file": "boot_sector.asm",
+    "output": "boot_sector.bin"
+  }
+]

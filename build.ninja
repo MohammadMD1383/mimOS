@@ -1,0 +1,4 @@
+rule asmc
+    command = nasm -f bin $in -o $out
+
+build boot_sector.bin: asmc boot_sector.asm
