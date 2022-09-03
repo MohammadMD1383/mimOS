@@ -1,3 +1,5 @@
+#include <c/test.hpp>
+
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 extern "C" void _start() {

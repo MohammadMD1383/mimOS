@@ -77,6 +77,8 @@ sectors_error_msg:
 ; ╔════════════════════════════════════════╗
 ; ║       32-bit Mode Print Function       ║
 ; ╚════════════════════════════════════════╝
+; params
+;   └─ ebx: address of null-terminated char[]
 VIDEO_MEMORY   equ 0xB8000
 WHITE_ON_BLACK equ 0x0F
 
@@ -90,7 +92,6 @@ print_32:
 	; ah is the color
 	mov ah, WHITE_ON_BLACK
 
-	; ebx is param #1 (address of null-terminated char[])
 	; (ebx -= 1) because in each loop cycle we will increase it by 1
 	sub ebx, 1
 

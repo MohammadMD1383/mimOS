@@ -7,19 +7,19 @@
   },
   {
     "directory": "/media/mohammad/Files/projects/mimOS",
-    "command": "nasm -f elf kernel_entry.asm -o out/kernel_entry.o",
-    "file": "kernel_entry.asm",
+    "command": "nasm -f elf kernel/kernel_entry.asm -o out/kernel_entry.o",
+    "file": "kernel/kernel_entry.asm",
     "output": "out/kernel_entry.o"
   },
   {
     "directory": "/media/mohammad/Files/projects/mimOS",
-    "command": "x86_64-elf-g++ -m32 -ffreestanding -c kernel.cpp -o out/kernel.o",
-    "file": "kernel.cpp",
+    "command": "x86_64-elf-g++ -m32 -ffreestanding -I/Files/projects/mimOS/include -c kernel/kernel.cpp -o out/kernel.o",
+    "file": "kernel/kernel.cpp",
     "output": "out/kernel.o"
   },
   {
     "directory": "/media/mohammad/Files/projects/mimOS",
-    "command": "x86_64-elf-ld -m elf_i386 -o out/kernel.bin -Ttext 0x1000 out/kernel_entry.o out/kernel.o --oformat binary",
+    "command": "x86_64-elf-ld -m elf_i386 -o out/kernel.bin -Ttext 0x500 out/kernel_entry.o out/kernel.o --oformat binary",
     "file": "out/kernel_entry.o",
     "output": "out/kernel.bin"
   },

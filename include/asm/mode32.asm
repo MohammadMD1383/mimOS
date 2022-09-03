@@ -26,7 +26,7 @@ init_32:
 	mov gs, ax
 
 	; update stack
-	mov ebp, 0x9F000
+	mov ebp, 0x9FC00
 	mov esp, ebp
 
 	; start 32-bit mode
