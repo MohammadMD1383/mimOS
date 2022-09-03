@@ -1,23 +1,24 @@
 ; ╔═══════════════════════════════════════╗
 ; ║          Bios Print Function          ║
 ; ╚═══════════════════════════════════════╝
+; params
+;   └─ bx: address of null-terminated char[]
 print:
     pusha
 
-    ; bx is param #1 (address of null-terminated char[])
     ; (bx -= 1) in order to add one by one when the loop starts
     sub bx, 1
 
     ; bios tty mode
     mov ah, 0x0E
 
-; while (1) {
-;   bx += 1;
-;   al = *bx;
-;   if (al == 0) goto end_print;
-;   interrupt(0x10);
-; }
 print_loop:
+	; while (1) {
+	;   bx += 1;
+	;   al = *bx;
+	;   if (al == 0) goto end_print;
+	;   interrupt(0x10);
+	; }
     add bx, 1
     mov al, [bx]
     cmp al, 0
@@ -28,6 +29,49 @@ print_loop:
 print_end:
     popa
     ret
+
+
+; ╔════════════════════════════════════════╗
+; ║          Load Kernel Function          ║
+; ╚════════════════════════════════════════╝
+; params
+;   ├─ es:bx: address to write to
+;   ├─ dh: number of sectors to read
+;   └─ dl: drive number [optional: as bios will set this for us]
+load_kernel:
+	pusha
+	push dx
+
+	mov ah, 2  ; bios read disk function
+	mov al, dh ; number of disk sectors to read
+	mov cl, 2  ; disk sector to start read from
+	mov ch, 0  ; disk cylinder
+	mov dh, 0  ; disk head
+	int 0x13   ; bios interrupt
+	jc  load_kernel_disk_error
+
+	pop dx
+
+	cmp al, dh ; bios will set al to number of sectors read
+	jne load_kernel_sectors_error
+
+	popa
+	ret
+
+load_kernel_disk_error:
+	mov bx, disk_error_msg
+	call print
+	jmp $ ; hang
+
+load_kernel_sectors_error:
+	mov bx, sectors_error_msg
+	call print
+	jmp $ ; hang
+
+disk_error_msg:
+	db "DISK ERROR", 0
+sectors_error_msg:
+	db "SECTOR ERROR", 0
 
 
 ; ╔════════════════════════════════════════╗

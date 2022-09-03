@@ -1,4 +1,33 @@
 rule asmc
     command = nasm -f bin $in -o $out
 
-build boot_sector.bin: asmc boot_sector.asm
+rule asmo
+    command = nasm -f elf $in -o $out
+
+rule cpp
+    command = x86_64-elf-g++ -m32 -ffreestanding -c $in -o $out
+
+rule cc
+    command = x86_64-elf-gcc -m32 -ffreestanding -c $in -o $out
+
+rule link
+    command = x86_64-elf-ld -m elf_i386 -o $out -Ttext 0x1000 $in --oformat binary
+
+rule cat
+    command = cat $in > $out
+
+
+###########################
+#          build          #
+###########################
+
+# boot_sector
+build out/boot_sector.bin: asmc boot_sector.asm
+
+# kernel
+build out/kernel_entry.o: asmo kernel_entry.asm
+build out/kernel.o:       cpp kernel.cpp
+build out/kernel.bin:     link out/kernel_entry.o out/kernel.o
+
+# mimOS
+build out/mimOS.img:       cat out/boot_sector.bin out/kernel.bin

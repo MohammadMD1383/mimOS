@@ -1,3 +1,6 @@
+; where we load kernel in memory
+KERNEL_MAIN equ 0x1000
+
 ; set offset to start of boot sector loaded in memory
 [org 0x7C00]
 
@@ -8,6 +11,11 @@ mov sp, bp
 ; print text
 mov bx, text
 call print
+
+; load kernel
+mov bx, KERNEL_MAIN
+mov dh, 1
+call load_kernel
 
 ; change to 32-bit mode
 call switch_to_32
@@ -26,6 +34,9 @@ jmp $
 begin_32:
 	mov ebx, text_32
 	call print_32
+
+	call KERNEL_MAIN
+
 	jmp $
 
 
